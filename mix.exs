@@ -12,7 +12,7 @@ defmodule ApiPlayground.Mixfile do
   def application do
     [
       mod: { ApiPlayground, [] },
-      applications: [:phoenix]
+      applications: [:phoenix, :plug, ]
     ]
   end
 
@@ -24,7 +24,9 @@ defmodule ApiPlayground.Mixfile do
   defp deps do
     [
       {:phoenix, "0.2.9"},
-      {:cowboy, "~> 0.10.0", github: "extend/cowboy", optional: true}
+      {:cowboy, "~> 0.10.0", github: "extend/cowboy", optional: true},
+      {:ecto, github: "elixir-lang/ecto" },
+      {:postgrex, github: "ericmj/postgrex", override: true }
     ]
   end
 end

@@ -9,6 +9,8 @@ defmodule ApiPlayground.Config.Dev do
   config :plugs, code_reload: true
 
   config :logger, level: :debug
+
+  config :db, uri: "ecto://foo:bar@localhost/api_playground_dev"
 end
 
 
