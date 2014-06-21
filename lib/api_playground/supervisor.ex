@@ -6,8 +6,10 @@ defmodule ApiPlayground.Supervisor do
   end
 
   def init([]) do
-    children = []
-
+    children = [
+      worker(ApiPlayground.Repo, [])
+      # worker(ApiPlayground.Router, [], function: :start)
+    ]
     # See http://elixir-lang.org/docs/stable/Supervisor.Behaviour.html
     # for other strategies and supported options
     supervise(children, strategy: :one_for_one)

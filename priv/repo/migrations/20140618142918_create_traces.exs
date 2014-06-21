@@ -3,10 +3,10 @@ defmodule ApiPlayground.Repo.Migrations.CreateTraces do
 
   def up do
     """
-    CREATE TABLE IF NOT EXISTS traces(
-      id serial primary key,
-      data text
-    )
+    CREATE TABLE IF NOT EXISTS traces
+      ( id serial primary key,
+        data text
+      )
     """
   end
 

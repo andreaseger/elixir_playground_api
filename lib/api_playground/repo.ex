@@ -6,7 +6,7 @@ defmodule ApiPlayground.Repo do
   end
 
   def priv do
-    :code.priv_dir(:api_playground)
+    app_dir(:api_playground, "priv/repo")
   end
 end
 

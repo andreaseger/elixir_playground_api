@@ -25,8 +25,8 @@ defmodule ApiPlayground.Mixfile do
     [
       {:phoenix, "0.2.9"},
       {:cowboy, "~> 0.10.0", github: "extend/cowboy", optional: true},
-      {:ecto, github: "elixir-lang/ecto" },
-      {:postgrex, github: "ericmj/postgrex", override: true }
+      {:postgrex, "~> 0.5.0" },
+      {:ecto, "~> 0.2.0" }
     ]
   end
 end
