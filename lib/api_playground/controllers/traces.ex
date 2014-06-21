@@ -9,13 +9,16 @@ defmodule ApiPlayground.Controller.Traces do
   end
 
   def show(conn) do
-    trace = Repo.get(ApiPlayground.Trace, conn.param["id"])
-    IO.inspect trace
-    json conn, 200, trace.data
+    case Repo.get(Trace, conn.params["id"]) do
+      nil ->
+        text conn, 404, ""
+      trace ->
+        json conn, 200, trace.data
+    end
   end
 
   def delete(conn) do
-    trace = Repo.get(Trace, conn.param["id"])
+    trace = Repo.get(Trace, conn.params["id"])
 
     case Repo.delete(trace) do
       :ok ->
@@ -40,7 +43,7 @@ defmodule ApiPlayground.Controller.Traces do
 
   def update(conn) do
     {:ok, body, conn} = read_body(conn, length: 10_000)
-    trace = Repo.get(Trace, conn.param["id"]) |> struct(data: body)
+    trace = Repo.get(Trace, conn.params["id"]) |> struct(data: body)
 
     case Trace.validate(trace) do
       [] ->
