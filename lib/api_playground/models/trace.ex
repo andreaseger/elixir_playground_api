@@ -17,7 +17,7 @@ defmodule ApiPlayground.Trace do
     case U.json_decode(json_) do
       {:ok, _} ->
         []
-      {:error, term} ->
+      {:error, _term} ->
         [{:data, "malformed json"}]
     end
   end

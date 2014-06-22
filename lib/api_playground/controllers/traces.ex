@@ -1,5 +1,6 @@
 defmodule ApiPlayground.Controller.Traces do
   use Phoenix.Controller
+  import Ecto.Query
   alias ApiPlayground.Repo
   alias ApiPlayground.Trace
   alias ApiPlayground.Utils, as: U
@@ -12,20 +13,23 @@ defmodule ApiPlayground.Controller.Traces do
   def show(conn) do
     case Repo.get(Trace, conn.params["id"]) do
       nil ->
-        text conn, 404, ""
+        not_found conn
       trace ->
         json conn, 200, trace.data
     end
   end
 
   def destroy(conn) do
-    trace = Repo.get(Trace, conn.params["id"])
-
-    case Repo.delete(trace) do
-      :ok ->
-        text conn, 200, ""
-      errors ->
-        json conn, 400, U.json_encode(%{errors: errors})
+    case Repo.get(Trace, conn.params["id"]) do
+      nil ->
+        not_found conn
+      trace ->
+        case Repo.delete(trace) do
+          :ok ->
+            text conn, 200, ""
+          errors ->
+            json conn, 400, U.json_encode(%{errors: errors})
+        end
     end
   end
 
@@ -53,5 +57,9 @@ defmodule ApiPlayground.Controller.Traces do
       errors ->
         json conn, 400, U.json_encode(%{errors: errors})
     end
+  end
+
+  defp not_found(conn) do
+    text conn, 404, ""
   end
 end
