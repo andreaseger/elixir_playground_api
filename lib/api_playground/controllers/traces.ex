@@ -5,7 +5,8 @@ defmodule ApiPlayground.Controller.Traces do
   alias ApiPlayground.Utils, as: U
 
   def index(conn) do
-    text conn, "index"
+    count = Repo.one(Trace |> select([t], count(t.id)))
+    json conn, U.json_encode(%{count: count})
   end
 
   def show(conn) do

@@ -1,6 +1,6 @@
 defmodule ApiPlayground.Trace do
   use Ecto.Model
-  alias ApiPlayground.Utils
+  alias ApiPlayground.Utils, as: U
 
   schema "traces" do
     field :data, :string
@@ -14,7 +14,7 @@ defmodule ApiPlayground.Trace do
   defp validate_json(:data, ""),
     do: [{:data, "missing data"}]
   defp validate_json(:data, json_) do
-    case Utils.json_decode(json_) do
+    case U.json_decode(json_) do
       {:ok, _} ->
         []
       {:error, term} ->
