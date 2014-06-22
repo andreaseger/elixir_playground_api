@@ -4,27 +4,80 @@ defmodule ApiPlayground.RouterTest do
   alias ApiPlayground.Router
   alias ApiPlayground.Repo
   alias ApiPlayground.Trace
+  alias ApiPlayground.Utils, as: U
 
   setup do
     trace = struct(Trace, data: "[{ \"latitude\": 32.9377784729004, \"longitude\": -117.230392456055 }]")
-    Repo.insert(trace)
-    :ok
+    trace = Repo.insert(trace)
+    {:ok, trace: trace}
   end
 
-  test "fetch existing trace" do
-    conn = conn("GET", "/traces/1")
+  test "fetch existing trace", meta do
+    id = meta[:trace].id
+    conn = conn(:get, "/traces/#{id}")
     conn = Router.call(conn, [])
 
-    assert conn.status in 200..399
+    assert conn.status == 200
 
-    assert "[{ \"latitude\": 32.9377784729004, \"longitude\": -117.230392456055 }]" == conn.resp_body
+    assert conn.resp_body == meta[:trace].data
   end
 
   test "fetch non existing trace" do
-    conn = conn("GET", "/traces/23")
+    conn = conn(:get, "/traces/22343")
     conn = Router.call(conn, [])
 
     assert conn.status == 404
-    assert "" == conn.resp_body
+    assert conn.resp_body == ""
+  end
+
+  test "save new trace" do
+    body = "[{ \"latitude\": 32.9377784729004, \"longitude\": -117.230392456055 }]"
+    conn = conn(:post,
+                "/traces",
+                body,
+                headers: [{"content-type", "application/json"}])
+    conn = Router.call(conn, [])
+
+    assert conn.status == 200
+    {:ok, resp} = U.json_decode(conn.resp_body)
+    id = resp["id"]
+
+    conn = conn(:get, "/traces/#{id}")
+    conn = Router.call(conn, [])
+
+    assert conn.status == 200
+    assert conn.resp_body == body
+  end
+
+  test "update trace" do
+    body = "[{ \"latitude\": 32.9377784729004, \"longitude\": -117.230392456055 }]"
+    conn = conn(:post,
+                "/traces",
+                body,
+                headers: [{"content-type", "application/json"}])
+    conn = Router.call(conn, [])
+
+    assert conn.status == 200
+    {:ok, resp} = U.json_decode(conn.resp_body)
+    id = resp["id"]
+
+    # update this record with a new body
+
+    body2 = "[{ \"latitude\": 32.333, \"longitude\": -32.555555 }]"
+    conn = conn(:put,
+                "/traces/#{id}",
+                body2,
+                headers: [{"content-type", "application/json"}])
+    conn = Router.call(conn, [])
+
+    assert conn.status == 200
+    {:ok, resp} = U.json_decode(conn.resp_body)
+    assert id == resp["id"]
+
+    conn = conn(:get, "/traces/#{id}")
+    conn = Router.call(conn, [])
+
+    assert conn.status == 200
+    assert conn.resp_body == body2
   end
 end

@@ -12,6 +12,11 @@ Now you can visit `localhost:4000` from your browser.
 
 * If you choose to change the application's structure, you could manually start the router from your code like this `ApiPlayground.Router.start`
 
+* the dev and test setup uses a user named "foo" for it to properly work this
+user should have the right to create databases and a database named after the
+user owned by the user should exist.
+(The last bit is needed for ecto.create and ecto.drop to work properly)
+
 ## Meta
 
 * uses [hex_web](https://github.com/ericmj/hex_web) for inspiration to solve

@@ -1,7 +1,7 @@
 ExUnit.start
 
-# Mix.Task.run "ecto.drop", ["ApiPlayground.Repo"]
-# Mix.Task.run "ecto.create", ["ApiPlayground.Repo"]
+Mix.Task.run "ecto.drop", ["ApiPlayground.Repo"]
+Mix.Task.run "ecto.create", ["ApiPlayground.Repo"]
 Mix.Task.run "ecto.migrate", ["ApiPlayground.Repo"]
 
 defmodule ApiPlaygroundTest.Case do

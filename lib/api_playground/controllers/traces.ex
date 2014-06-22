@@ -47,7 +47,7 @@ defmodule ApiPlayground.Controller.Traces do
 
     case Trace.validate(trace) do
       [] ->
-        trace = Repo.update(trace)
+        Repo.update(trace)
         json conn, 200, U.json_encode(%{id: trace.id})
       errors ->
         json conn, 400, U.json_encode(%{errors: errors})

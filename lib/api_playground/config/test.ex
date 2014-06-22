@@ -10,7 +10,7 @@ defmodule ApiPlayground.Config.Test do
 
   config :logger, level: :error
 
-  config :db, uri: "ecto://foo:bar@localhost/api_playground_test"
+  config :db, uri: "ecto://foo:bar@localhost/api_playground_test?size=1"
 end
 
 
