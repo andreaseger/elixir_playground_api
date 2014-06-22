@@ -7,9 +7,12 @@ defmodule ApiPlayground.Trace do
   end
 
   validate trace,
-    data: present(),
     data: validate_json()
 
+  defp validate_json(:data, nil),
+    do: [{:data, "missing data"}]
+  defp validate_json(:data, ""),
+    do: [{:data, "missing data"}]
   defp validate_json(:data, json_) do
     case Utils.json_decode(json_) do
       {:ok, _} ->

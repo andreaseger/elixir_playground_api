@@ -21,22 +21,6 @@ defmodule ApiPlayground.RouterTest do
     assert conn.resp_body == meta[:trace].data
   end
 
-  test "delete existing trace", meta do
-    id = meta[:trace].id
-    conn = conn(:delete, "/traces/#{id}")
-    conn = Router.call(conn, [])
-
-    assert conn.status == 200
-    assert conn.resp_body == ""
-
-    # test if this trace is now gone
-    conn = conn(:get, "/traces/#{id}")
-    conn = Router.call(conn, [])
-
-    assert conn.status == 404
-    assert conn.resp_body == ""
-  end
-
   test "fetch non existing trace" do
     conn = conn(:get, "/traces/22343")
     conn = Router.call(conn, [])
@@ -85,5 +69,21 @@ defmodule ApiPlayground.RouterTest do
 
     assert conn.status == 200
     assert conn.resp_body == body2
+  end
+
+  test "delete existing trace", meta do
+    id = meta[:trace].id
+    conn = conn(:delete, "/traces/#{id}")
+    conn = Router.call(conn, [])
+
+    assert conn.status == 200
+    assert conn.resp_body == ""
+
+    # test if this trace is now gone
+    conn = conn(:get, "/traces/#{id}")
+    conn = Router.call(conn, [])
+
+    assert conn.status == 404
+    assert conn.resp_body == ""
   end
 end
