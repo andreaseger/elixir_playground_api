@@ -17,12 +17,12 @@ defmodule ApiPlayground.Controller.Traces do
     end
   end
 
-  def delete(conn) do
+  def destroy(conn) do
     trace = Repo.get(Trace, conn.params["id"])
 
     case Repo.delete(trace) do
       :ok ->
-        json conn, 200, U.json_encode(%{id: trace.id})
+        text conn, 200, ""
       errors ->
         json conn, 400, U.json_encode(%{errors: errors})
     end

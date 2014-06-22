@@ -18,8 +18,23 @@ defmodule ApiPlayground.RouterTest do
     conn = Router.call(conn, [])
 
     assert conn.status == 200
-
     assert conn.resp_body == meta[:trace].data
+  end
+
+  test "delete existing trace", meta do
+    id = meta[:trace].id
+    conn = conn(:delete, "/traces/#{id}")
+    conn = Router.call(conn, [])
+
+    assert conn.status == 200
+    assert conn.resp_body == ""
+
+    # test if this trace is now gone
+    conn = conn(:get, "/traces/#{id}")
+    conn = Router.call(conn, [])
+
+    assert conn.status == 404
+    assert conn.resp_body == ""
   end
 
   test "fetch non existing trace" do
@@ -49,17 +64,8 @@ defmodule ApiPlayground.RouterTest do
     assert conn.resp_body == body
   end
 
-  test "update trace" do
-    body = "[{ \"latitude\": 32.9377784729004, \"longitude\": -117.230392456055 }]"
-    conn = conn(:post,
-                "/traces",
-                body,
-                headers: [{"content-type", "application/json"}])
-    conn = Router.call(conn, [])
-
-    assert conn.status == 200
-    {:ok, resp} = U.json_decode(conn.resp_body)
-    id = resp["id"]
+  test "update trace",meta do
+    id = meta[:trace].id
 
     # update this record with a new body
 
